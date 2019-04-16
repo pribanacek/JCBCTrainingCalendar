@@ -61,6 +61,9 @@ function refreshCalendars() {
             calendars[key].events(events);
             console.log(`[${moment()}] Successfully loaded ${key} schedule.`);
             // console.log(events);
+        }).catch(error => {
+            console.error(`[${moment()}] Unexpected error occurred`);
+            console.error(error);
         });
     });
 }
@@ -82,6 +85,12 @@ app.get('/schedule/:type', function (req, res, next) {
 
 app.use(function(req, res, next) {
     res.sendStatus(404);
+});
+
+app.use(function(error, req, res, next) {
+    console.error(`[${moment()}] Unexpected error occurred`);
+    console.error(error);
+    res.sendStatus(500);
 });
 
 app.listen(3000, '0.0.0.0', function() {
