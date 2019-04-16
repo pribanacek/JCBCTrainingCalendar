@@ -1,7 +1,10 @@
 const ical = require('ical-generator');
 const express = require('express');
 const app = express();
+
 const moment = require('moment');
+moment.tz.setDefault("Europe/London");
+
 const GoogleSpreadsheet = require('google-spreadsheet');
 const GoogleSheet = require('./GoogleSheet');
 const CrewTable = require('./CrewTable');
@@ -27,14 +30,13 @@ function useSheet(date, now) {
     return Math.abs(date.diff(now, 'days')) <= 7;
 }
 
-// setup();
 
 ['M1', 'M2'].forEach(name => {
     calendars[name] = ical({
-        domain: 'somthing.com',
+        domain: '77.78.99.41',
         name: name + ' Training',
         timezone: 'Europe/London',
-        ttl: 15 * 60
+        ttl: 30 * 60
     });
 });
 
@@ -57,16 +59,16 @@ function refreshCalendars() {
         loadCrewEvents(key).then(events => {
             calendars[key].clear();
             calendars[key].events(events);
-            console.log(`Successfully loaded ${key} schedule.`);
-            console.log(events);
+            console.log(`[${moment()}] Successfully loaded ${key} schedule.`);
+            // console.log(events);
         });
     });
 }
 
 refreshCalendars();
 
-// refresh every 15 mins
-setInterval(refreshCalendars, 15 * 60 * 1000);
+// refresh every 30 mins
+setInterval(refreshCalendars, 30 * 60 * 1000);
 
 app.get('/schedule/:type', function (req, res, next) {
     if (req.params.type.endsWith('.ical')) {
