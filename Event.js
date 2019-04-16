@@ -78,11 +78,13 @@ module.exports = function (date, cells) {
         description = cells[0] + '\n' + cells[3];
     }
 
-    if (!getTimeString(cells)) {
-        description = 'Time TBC\n' + description;
+    let timeCell = getTimeString(cells);
+
+    if (!timeCell) {
+        name += ' (Time TBC)';
     }
 
-    let start = setTime(date, getTimeString(cells));
+    let start = setTime(date, timeCell);
     let end = getEnd(date, date.hour() < 10, date.day() % 6 == 0, name);
 
     return {
