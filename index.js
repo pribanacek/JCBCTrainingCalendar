@@ -8,6 +8,7 @@ moment.tz.setDefault("Europe/London");
 const GoogleSpreadsheet = require('google-spreadsheet');
 const GoogleSheet = require('./GoogleSheet');
 const CrewTable = require('./CrewTable');
+const Log = require('./Log');
 
 const crews = ['M1', 'M2'];
 const calendars = {};
@@ -59,11 +60,9 @@ function refreshCalendars() {
         loadCrewEvents(key).then(events => {
             calendars[key].clear();
             calendars[key].events(events);
-            console.log(`[${moment()}] Successfully loaded ${key} schedule.`);
-            // console.log(events);
+            Log.info(`Successfully loaded ${key} schedule.`);
         }).catch(error => {
-            console.error(`[${moment()}] Unexpected error occurred`);
-            console.error(error);
+            Log.error(error);
         });
     });
 }
@@ -72,6 +71,12 @@ refreshCalendars();
 
 // refresh every 30 mins
 setInterval(refreshCalendars, 30 * 60 * 1000);
+
+app.use(function(req, res, next) {
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    Log.info(`Received ${req.method} to ${req.url} from ${ip}`);
+    next();
+});
 
 app.get('/schedule/:type', function (req, res, next) {
     if (req.params.type.endsWith('.ical')) {
@@ -88,11 +93,10 @@ app.use(function(req, res, next) {
 });
 
 app.use(function(error, req, res, next) {
-    console.error(`[${moment()}] Unexpected error occurred`);
-    console.error(error);
+    Log.error(error);
     res.sendStatus(500);
 });
 
 app.listen(3000, '0.0.0.0', function() {
-    console.log('Server running at http://127.0.0.1:3000/');
+    Log.info('Server running at http://127.0.0.1:3000/');
 });
