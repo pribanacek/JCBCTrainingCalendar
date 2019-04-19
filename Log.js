@@ -3,6 +3,9 @@ const moment = require('moment'); // convinient time formatting
 const ansi = require('ansi-styles'); // text style formatting for console output
 
 const PATH = __dirname + '/log/';
+if (!fs.existsSync(PATH)) {
+    fs.mkdirSync(PATH);
+}
 
 const CONSOLE_LOG = console.log;
 const CONSOLE_ERR = console.error;
