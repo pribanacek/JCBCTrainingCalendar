@@ -10,7 +10,7 @@ if (!fs.existsSync(PATH)) {
 const CONSOLE_LOG = console.log;
 const CONSOLE_ERR = console.error;
 
-const GET_TIME = () => moment().format('DD/MM/YYYY HH:MM:SS');
+const GET_TIME = () => moment().format('DD/MM/YYYY HH:mm:ss');
 
 const ERROR_LOG = fs.createWriteStream(PATH + 'error.log', {flags: 'a'});
 const INFO_LOG = fs.createWriteStream(PATH + 'info.log', {flags: 'a'});
