@@ -71,7 +71,7 @@ module.exports = function (date, cells) {
     let name = 'N/A';
     let description = '';
 
-    if (cells.length == 2) {
+    if (cells.length <= 2) {
         name = cells[0];
     } else if (cells.length <= 4) {
         name = cells[1];
