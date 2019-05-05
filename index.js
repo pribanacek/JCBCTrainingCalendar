@@ -1,3 +1,5 @@
+const DEBUG = false;
+
 const ical = require('ical-generator');
 const express = require('express');
 const app = express();
@@ -55,13 +57,25 @@ async function loadCrewEvents(crewName) {
     return events;
 }
 
+function stringifyEvent(evt) {
+    return evt.start.format('DD/MM/YYYY HH:mm:ss') + ' ' + evt.summary;
+}
+
 function refreshCalendars() {
     Object.keys(calendars).forEach(key => {
         loadCrewEvents(key).then(events => {
             calendars[key].clear();
             calendars[key].events(events);
             Log.info(`Successfully loaded ${key} schedule.`);
+            if (DEBUG) {
+                var s = "";
+                events.forEach(evt => {
+                    s += stringifyEvent(evt) + '\n';
+                });
+                Log.info(s);
+            }
         }).catch(error => {
+            Log.error("Error loading calendar");
             Log.error(error);
         });
     });
@@ -93,6 +107,7 @@ app.use(function(req, res, next) {
 });
 
 app.use(function(error, req, res, next) {
+    Log.error("Error in fetching response");
     Log.error(error);
     res.sendStatus(500);
 });
