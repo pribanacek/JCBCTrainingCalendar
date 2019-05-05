@@ -73,9 +73,12 @@ module.exports = function (date, cells) {
 
     if (cells.length == 2) {
         name = cells[0];
-    } else if (cells.length == 4) {
+    } else if (cells.length <= 4) {
         name = cells[1];
-        description = cells[0] + '\n' + cells[3];
+        description = cells[0];
+        if (cells[3]) {
+            description += '\n' + cells[3];
+        }
     }
 
     let timeCell = getTimeString(cells);
