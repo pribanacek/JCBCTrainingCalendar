@@ -3,23 +3,9 @@ const moment = require('moment');
 function getTimeString(cells) {
     const regex = /[0-9]{1,2}( |:|\.)?[0-9]{2}/g;
 
-    for (i in cells) {
-        var cell = cells[i];
-        if (cell.toLowerCase().includes('meet')) {
-            var matches = cell.match(regex);
-            if (!matches) {
-                return null;
-            }
-            return matches[0];
-        }
-    }
-
-    for (i in cells) {
-        var cell = cells[i];
-        var matches = cell.match(regex);
-        if (matches && matches.length > 0) {
-            return matches[0];
-        }
+    if (cells[1]) {
+        var matches = cells[1].match(regex);
+        return matches[0];
     }
 
     return null;
