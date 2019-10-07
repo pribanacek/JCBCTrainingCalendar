@@ -47,7 +47,7 @@ function getEnd(date, morning, weekend, name) {
     var end = moment(date);
     if (name.includes('erg') || name.includes('circuit')) {
         end.add(1, 'hour');
-    } else if (name.includes('weight')) {
+    } else if (name.includes('weight') || name.replace(/ /g,'').includes('s&c')) {
         end.add(1.5, 'hour');
     } else if (name.includes('outing')) {
         if (morning && !weekend) {

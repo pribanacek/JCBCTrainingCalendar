@@ -44,7 +44,7 @@ class CrewTable {
             date.month(dates[i].match(/[a-zA-Z]+/)[0]);
 
             var amTime = moment(date).hour(6).minute(30);
-            var pmTime = moment(date).hour(date.day() % 6 == 0 ? 14 : 18).minute(0);
+            var pmTime = moment(date).hour(date.day() % 6 == 0 ? 13 : 18).minute(0);
 
             var amCells = this.getEventCells(amIndex, i);
             if (amCells.length > 0) {
