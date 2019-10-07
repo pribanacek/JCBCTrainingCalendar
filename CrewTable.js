@@ -35,8 +35,8 @@ class CrewTable {
         var events = [];
 
         var dates = this.cells[1];
-        var amIndex = this.cells.findIndex(row => row[0].toLowerCase() == 'am');
-        var pmIndex = this.cells.findIndex(row => row[0].toLowerCase() == 'pm');
+        var amIndex = this.cells.findIndex(row => row[0].toLowerCase() == 'session 1');
+        var pmIndex = this.cells.findIndex(row => row[0].toLowerCase() == 'session 2');
 
         for (let i = 1; i < dates.length; i++) {
             var date = moment().set({hour:0,minute:0,second:0,millisecond:0});
@@ -61,9 +61,9 @@ class CrewTable {
     static findCells(title, sheet) {
         return new Promise((resolve, reject) => {
             sheet.getCells({
-                'min-row': 25,
+                'min-row': 1,
                 'max-row': 64,
-                'min-col': 2,
+                'min-col': 1,
                 'max-col': 16,
                 'return-empty': true
             }, (error, cells) => {
@@ -74,7 +74,7 @@ class CrewTable {
                     const HEIGHT = 12;
                     var titleCell = cells.findIndex(cell => cell._value.includes(title));
                     if (titleCell < 0) {
-                        return reject(new Error("No subtable found"));
+                        return reject(new Error(`No subtable found for ${ title } ${ sheet.title }`));
                     }
 
                     var startRow = cells[titleCell].row;

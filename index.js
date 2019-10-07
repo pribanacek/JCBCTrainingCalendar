@@ -51,8 +51,12 @@ async function loadCrewEvents(crewName) {
     sheets = sheets.filter(sheet => useSheet(parseSheetDate(sheet.title), now));
     var events = [];
     for (i in sheets) {
-        var crewTable = await CrewTable.findCells(crewName, sheets[i]);
-        events.push.apply(events, crewTable.getEvents());
+        try {
+            var crewTable = await CrewTable.findCells(crewName, sheets[i])
+            events.push.apply(events, crewTable.getEvents());
+        } catch (e) {
+            Log.error(e);
+        }
     }
     return events;
 }
@@ -69,7 +73,7 @@ function refreshCalendars() {
             Log.info(`Successfully loaded ${key} schedule.`);
             if (DEBUG) {
                 var s = "";
-                events.forEach(evt => {
+                events.forEach((evt) => {
                     s += stringifyEvent(evt) + '\n';
                 });
                 Log.info(s);
