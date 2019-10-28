@@ -1,13 +1,11 @@
 const moment = require('moment');
 
 function getTimeString(cells) {
-    const regex = /[0-9]{1,2}( |:|\.)?[0-9]{2}/g;
-
     if (cells[1]) {
+        const regex = /[0-9]{1,2}( |:|\.)?[0-9]{2}/g;
         var matches = cells[1].match(regex);
-        return matches[0];
+        return matches ? matches[0] : null;
     }
-
     return null;
 }
 
@@ -66,7 +64,9 @@ module.exports = function (date, cells) {
 
     let timeCell = getTimeString(cells);
 
-    if (!timeCell) {
+    if (cells[1] && cells[1].toLowerCase().replace(/ /g, '').includes('owntime')) {
+        name += ' (own time)';
+    } else if (!timeCell) {
         name += ' (Time TBC)';
     }
 
